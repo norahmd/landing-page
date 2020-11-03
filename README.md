@@ -15,4 +15,4 @@ it contains a landing page that have multipule sections and based on that it cre
 
 * DOMContentLoaded
 * click
-* scroll
+* intersectionObserver
