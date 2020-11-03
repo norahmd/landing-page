@@ -2,12 +2,17 @@
 
 ## Table of Contents
 
-* [Instructions](#instructions)
+* [Overview](#Overview)
+* [Events used in this project](#Events used in this project)
 
-## Instructions
 
-The starter project has some HTML and CSS styling to display a static version of the Landing Page project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+## Overview
 
-To get started, open `js/app.js` and start building out the app's functionality
+This project uses HTML, CSS and JavaScrip to create an interactive DOM elements.
+it contains a landing page that have multipule sections and based on that it creates nav bar with items that are linked to each section.
 
-For specific, detailed instructions, look at the project instructions in the Udacity Classroom.
+## Events used in this project
+
+* [DOMContentLoaded]
+* [click]
+* [scroll]

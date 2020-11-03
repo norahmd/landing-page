@@ -25,16 +25,6 @@ const sections = mainContent.querySelectorAll('section');
  * Start Helper Functions
  * 
 */
-function isInViewport(element) {
-    var rect = element.getBoundingClientRect();
-    var html = document.documentElement;
-    return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || html.clientHeight) &&
-      rect.right <= (window.innerWidth || html.clientWidth)
-    );
-  }
 
 
 /**
@@ -45,50 +35,49 @@ function isInViewport(element) {
 
 // build the nav
 function buildNavBar(){
-    navBarList.style.textAlign = 'center'
+// based on the number of sections nav elements will be created for each section
     sections.forEach(function(section){
         let sectionData = section.dataset.nav
+
         let anchor = document.createElement('a')
         anchor.href = '#' + section.id
         anchor.dataset.section = section.id
+        anchor.innerText = sectionData
+
         let item = document.createElement('li')
-        let itemContent = document.createElement('p')
-        itemContent.style.color = 'black'
-        itemContent.innerText = sectionData
-        item.appendChild(itemContent)
-        anchor.appendChild(item)
-        navBarList.appendChild(anchor)
+        item.appendChild(anchor)
+
+        navBarList.appendChild(item)
     })
-    navBarList.style = 'display: flex; text-align: center; justify-content: space-around;'
+    navBarList.style = 'display: flex; text-align: center; justify-content: space-around; margin-top: 15px; margin-bottom: 15px;'
 }
+
 
 // Add class 'active' to section when near top of viewport
-function activateSection(event){
-    sections.forEach(function(section){
-        if (isInViewport(section)){
-            section.classList.add("active-section");
-        } else {
-            section.classList.remove("active-section");
-        }
-    })
-    // let section = document.getElementById(event.target.href)
-    // if (isInViewport(event.target)){
-    //     section.classList.add("active-section");
-    // } else {
-    //     event.target.classList.remove("active-section");
-    // }
-}
+var intersectionObserver = new IntersectionObserver(function(entries) {
+    // If intersectionRatio is 0, the target is out of view
+    if (entries[0].intersectionRatio == 0 || entries[0].intersectionRatio <= 0  ) {
+
+        entries[0].target.classList.remove("active-section");
+
+    } else {
+
+        entries[0].target.classList.add("active-section");
+
+    }
+  });
 
 
-
-
-// Scroll to anchor ID using scrollTO event
+// Scroll to anchor ID using scrollIntoView event
 function scrollToSection(event){
-    event.preventDefault()
-    let elementId = event.currentTarget.dataset.section
-    let section = document.getElementById(elementId)
-    section.scrollIntoView({behavior: "smooth", alignToTop: true})
+    if (event.target.nodeName === 'A'){
+        event.preventDefault()
+        let elementId = event.target.dataset.section
+        let section = document.getElementById(elementId)
+        section.scrollIntoView({behavior: "smooth", alignToTop: true})
+    } 
 }
+
 
 /**
  * End Main Functions
@@ -97,13 +86,14 @@ function scrollToSection(event){
 */
 
 // Build menu 
-document.addEventListener('DOMContentLoaded', buildNavBar());
+document.addEventListener('DOMContentLoaded', buildNavBar);
 
 // Scroll to section on link click
-document.querySelectorAll('a').forEach(function(anchor){
-    anchor.addEventListener('click', scrollToSection
-    );
-})
+navBarList.addEventListener('click', scrollToSection)
+
 // Set sections as active
-window.addEventListener('scroll', activateSection)
+sections.forEach(function(section){
+    intersectionObserver.observe(section);
+})
+
 
